@@ -112,43 +112,43 @@ console.log(C_obj.value);
 
  function promiseReduce(promiseArr, func, start){
 
+	this.sum = start;
+
 	return new Promise(function(resolve, reject) {
-		console.log('ended <----');
+		function loop(){
+
+			if(!promiseArr.length){
+				console.log(this.sum);
+				return Promise.resolve(this.sum);
+			}
+
+			promiseArr[0].then(
+				x => {
+					func.call(this, x);
+					//console.log(this.sum);
+					promiseArr.shift()
+					loop();
+				}
+			)
+			
+		}
+
+		loop();
+		
 	})
+
  }
 
-var promise0 = new Promise(function(resolve, reject) {
-	setTimeout( ()=>{ reject(0); }, 1000 );
-})
-var promise1 = new Promise(function(resolve, reject) {
-	setTimeout( ()=>{ reject(1); }, 1000 );
-})
-var promise2 = new Promise(function(resolve, reject) {
-	setTimeout( ()=>{ reject(2); }, 1000 );
-})
+var promise0 = Promise.resolve(0),
+	promise1 = Promise.resolve(1),
+	promise2 = Promise.resolve(2);
 
-
-/*promise
-	.then(
-		result => {
-			console.log('result - ' + result);
-		},
-		error => {
-			console.log('error - ' + error);
-		}
-	);
-*/
 
 var sumFn = function(num){
 	this.sum += num;
 }
 
-
-
 promiseReduce([promise0, promise1, promise2], sumFn, 0)
-	.then(res => console.log(res)); // => 2*/
+	.then(res => console.log(res)); // => 3
 
 
- /*var promise0 = Promise.resolve(0),
-	    promise1 = Promise.resolve(1),
-promise2 = Promise.resolve(2)*/
