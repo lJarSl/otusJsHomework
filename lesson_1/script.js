@@ -1,3 +1,4 @@
+'use strict'
 /**
  * Задание 1.
  *
@@ -14,38 +15,43 @@ var adder = {
 	create: function(){
 		return adder.loop;
 	},
-	loop: function(x){
-		if(x){
-			adder.sum += x;
+	loop: function(){
+		if(arguments.length && arguments[0]){
+			adder.sum += arguments[0];
 		} else {
 			console.log(adder.sum);
 		}
-		return adder.create();
+		return adder.loop;
 	}
 }
 
 var sumInstance = adder.create();
-sumInstance(1)()(20)(3)();
-
+sumInstance(1)(5)()(20)(3)();
 
 
 // функция
 
 function adderCreate() {
-	var value = 0;
-  return function func(num) {
-  	if(num) {
-  		value += num;
+	console.log('start count');
+	adderCreate.value = 0;
+  return function func() {
+  	if(arguments.length && arguments[0]) {
+  		adderCreate.value += arguments[0];
   	} else {
-		console.log(value);
+		console.log(adderCreate.value);
   	}
   	return func;
   };
 }
 
-var sumInstance = adderCreate();
+var sumInstance2 = adderCreate();
 
-sumInstance(5)(2)()(22)();
+sumInstance2(5)(2)()(22)();
+
+var sumInstance3 = adderCreate();
+
+sumInstance2(6)(2)()(6)();
+
 
 
 
@@ -67,7 +73,7 @@ if(typeof Object.create2 != 'function'){
 		return function(obj){
 
 			if(typeof obj != 'object'){
-				return concole.log('error!');
+				return console.log('error!');
 			}
 
 			Temp.prototype = obj;
@@ -92,6 +98,7 @@ function C2() {
   C1.call(this);
 }
 
+
 C2.prototype = Object.create2(C1.prototype);
 C2.prototype.constructor = C2;
 
@@ -112,20 +119,20 @@ console.log(C_obj.value);
 
  function promiseReduce(promiseArr, func, start){
 
-	this.sum = start;
+	promiseReduce.sum = start;
 
 	return new Promise(function(resolve, reject) {
 		function loop(){
 
 			if(!promiseArr.length){
-				console.log(this.sum);
-				return Promise.resolve(this.sum);
+				console.log(promiseReduce.sum);
+				return Promise.resolve(promiseReduce.sum);
 			}
 
 			promiseArr[0].then(
 				x => {
-					func.call(this, x);
-					//console.log(this.sum);
+					func.call(promiseReduce, x);
+					//console.log(promiseReduce.sum);
 					promiseArr.shift()
 					loop();
 				}
