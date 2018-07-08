@@ -1,0 +1,6 @@
+<ul class="menu">
+  <li *ngFor="let menuItem of menuTabs"
+   	[class.selected]="onSelect(menuItem.path)">
+  	<a class="menuItem" routerLink="/{{menuItem.path}}">{{menuItem.title}}</a>
+  </li>
+</ul>
